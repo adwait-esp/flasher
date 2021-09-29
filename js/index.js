@@ -287,7 +287,7 @@ flashButton.onclick = async () => {
     
     progressMsgQS.style.display = "inline";
     if (FILE_SERVER_HOST == "local")
-        file_server_url = window.location.protocol + "//" + window.location.host + "/images/";
+        file_server_url = document.location.href + "/images/";
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', file_server_url + flashFile, true);
