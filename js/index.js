@@ -18,7 +18,7 @@ const alertDiv = document.getElementById('alertDiv');
 const settingsWarning = document.getElementById("settingsWarning");
 const progressMsgQS = document.getElementById("progressMsgQS");
 const progressMsgDIY = document.getElementById("progressMsgDIY");
-const FILE_SERVER_URL = "http://127.0.0.1:8887/";
+var FILE_SERVER_HOST = "local";
 
 //import { Transport } from './cp210x-webusb.js'
 import { Transport } from './webserial.js'
@@ -282,12 +282,15 @@ flashButton.onclick = async () => {
     let chipType = $("input[type='radio'][name='chipType']:checked").val();
     let framework = document.getElementById("framework").value;
     let deviceType = document.getElementById("device").value;
-    let flashFile = framework + "_" + deviceType + ".bin";
+    let flashFile = chipType + "_" + framework + "_" + deviceType + "_combo.bin";
+    var file_server_url = FILE_SERVER_HOST;
     
     progressMsgQS.style.display = "inline";
-    
+    if (FILE_SERVER_HOST == "local")
+        file_server_url = window.location.protocol + "//" + window.location.host + "/images/";
+
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', FILE_SERVER_URL + chipType + "/" + flashFile, true);
+    xhr.open('GET', file_server_url + flashFile, true);
     xhr.responseType = "blob";
     xhr.send();
     xhr.onload = function () {
