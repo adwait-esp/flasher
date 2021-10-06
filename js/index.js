@@ -33,8 +33,8 @@ let esploader;
 let file1 = null;
 let connected = false;
 let index = 1;
-let rmOptions = ["Fan", "GPIO", "Homekit Switch", "Led Light", "Switch", "Temperature Sensor"];
-let rmOptValues = ["fan", "gpio", "homekit_switch", "led_light", "switch", "temperature_sensor"];
+let rmOptions = ["Fan", "GPIO", "Homekit Switch", "Led Light", " Multi Device", "Switch", "Temperature Sensor"];
+let rmOptValues = ["fan", "gpio", "homekit_switch", "led_light", "multi_device", "switch", "temperature_sensor"];
 let matterOptions = ["All Clusters App"];
 let matterOptValues = ["all-clusters-app_te6"];
 
