@@ -156,7 +156,7 @@ async function connectToDevice() {
 }
 
 function postConnectControls() {
-    lblConnTo.innerHTML = "<span style=color:#736a6a'>Connected to device: </span><b>" + chip + "</b>";
+    lblConnTo.innerHTML = "<b><span style='color:#17a2b8'>Connected to device: </span>" + chip + "</b>";
     lblConnTo.style.display = "block";
     $("#baudrates").prop("disabled", true);
     $("#flashButton").prop("disabled", false);

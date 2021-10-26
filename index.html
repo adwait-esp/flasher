@@ -89,14 +89,12 @@
             <div id="safariErr" style="display:none"><p align="center" style="color:red">This tool is not supported on Safari browser!</p>
             </div>
             <div id="topConnectBar">
-                <label style="display:none" id="lblConnTo">Connected to device: </label>
+                <label style="display:none" id="lblConnTo"><b>Connected to device: </b></label>
                 
                 <input class="btn btn-info btn-sm" type="button" id="connectButton" value="Connect" data-toggle="tooltip" 
                 data-placement="top" title="Connect to your device"/>
                 <input class="btn btn-warning btn-sm" type="button" id="disconnectButton" value="Disconnect" data-toggle="tooltip" 
                 data-placement="top" title="Disconnect from the device"/>
-                <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Erase Flash" data-toggle="tooltip" 
-                data-placement="top" title="Erase firmware on your device"/>
                 <hr />
             </div>
             <div class="row">
@@ -165,6 +163,10 @@
                     <div class="tab-pane fade show" id="v-pills-diy" role="tabpanel" aria-labelledby="v-pills-diy-tab">
                       <h3> Program </h3>
                       <span style="color:#736a6a"><b>Try your own:</b> Choose your own built firmware binary from the local storage to flash and use.</span>
+                      <br>
+                      <input class="btn btn-danger btn-sm" type="button" id="eraseButton" value="Erase Flash" data-toggle="tooltip" 
+                data-placement="top" title="Erase firmware on your device"/>
+                      <br><br>
                       <div class="alert alert-danger alert-dismissible" id="alertDiv" style="display:none; margin-top:10px">
                           <a href="#" class="close" aria-label="close" onclick="$('.alert').hide()">&times;</a>
                           <span id="alertmsg"></span>
