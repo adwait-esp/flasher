@@ -17,10 +17,48 @@
          <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+         <script type="text/javascript" src="node_modules/toml-js/src/toml.js"></script>
     </head>
     <body>
-        
         <div class="container">
+            <!-- Modal window for custom examples -->
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="previewModal" hidden>Open Modal</button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title"><span style="color: #17a2b8;"> ESP Firmware Flash Preview </span></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body" id="preview_body">
+                    <div><p>This is Quick Flash ESP LaunchPad service. Ensure you have connected your device to the serial USB port.
+                      <br>
+                      Note: Once you flash your device, any earlier firmware would be overwritten. Please review the following information before continuing.
+                    </p></div>
+                    <hr>
+                    <div><span style="color:#17a2b8;">ESP Framework : </span><span id="preview_esp_frm"></span></div>
+                    <div><span style="color:#17a2b8;">ESP Chipset Type : </span><span id="preview_esp_chip"></span></div>
+                    <div><span style="color:#17a2b8;">ESP Device Type : </span><span id="preview_esp_device"></span></div>
+                    <div><span style="color:#17a2b8;">Example Name : </span><span id="preview_example_name"></span></div>
+                    <div><span style="color:#17a2b8;">Firmware Image URL : </span><span id="preview_firmware_image"></span></div>
+                  </div>
+                  <div class="modal-footer">
+
+                    <input class="btn btn-info btn-sm" type="button" id="connectPreview" value="Connect" data-toggle="tooltip"
+                          data-placement="right" title="Connect to your device"/>
+                    <input class="btn btn-info btn-sm" type="button" id="flashCustom" value="Flash" data-toggle="tooltip" data-dismiss="modal"
+                          data-placement="right" title="This will download and flash the firmware image on your device" disabled/>
+                          <br><br>
+                    <!--<button type="button" class="btn btn-default" data-dismiss="modal" id="flash_custom">Flash</button>-->
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <div>
             <h1 align="center"><p><img src="./assets/esp-logo.png" width="42" height="42" style="vertical-align:middle"></img> ESP LaunchPad</p></h1>
             <h6 align="center"><span style="color:#736a6a">A Serial Flasher utility for Espressif chips</span></h6>

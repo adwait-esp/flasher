@@ -28,7 +28,7 @@ term.open(terminal);
 
 let device = null;
 let transport;
-let chip = "deFault";
+let chip = "default";
 let esploader;
 let file1 = null;
 let connected = false;
@@ -37,13 +37,36 @@ let rmOptions = ["Fan", "GPIO", "Homekit Switch", "Led Light", " Multi Device", 
 let rmOptValues = ["fan", "gpio", "homekit_switch", "led_light", "multi_device", "switch", "temperature_sensor"];
 let matterOptions = ["All Clusters App"];
 let matterOptValues = ["all-clusters-app_te6"];
+let config = null;
 
 disconnectButton.style.display = "none";
 eraseButton.style.display = "none";
 
+function checkAutoLoad() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tomlFileURL = urlParams.get('flashConfigURL');
+    if(tomlFileURL) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', tomlFileURL, true);
+        xhr.send();
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                config = toml.parse(xhr.responseText);
+                $('#preview_esp_frm').html(config.esp_framework);
+                $('#preview_esp_chip').html(config.esp_chipset_type);
+                $('#preview_esp_device').html(config.esp_device_type);
+                $('#preview_example_name').html(config.example_name);
+                $('#preview_firmware_image').html(config.firmware_image_url);
+                $('#previewModal').click();
+            }
+        }
+    }
+}
+
+checkAutoLoad();
 
 function populateDeviceTypes(product) {
-deviceTypeSelect.innerHTML = "";
+    deviceTypeSelect.innerHTML = "";
     if (product === "rainmaker"){
         for (let i = 0; i < rmOptions.length; i++)
         {
@@ -111,11 +134,8 @@ function _sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-connectButton.onclick = async () => {
-//    device = await navigator.usb.requestDevice({
-//        filters: [{ vendorId: 0x10c4 }]
-//    });
 
+async function connectToDevice() {
     if (device === null) {
         device = await navigator.serial.requestPort({
             filters: [{ usbVendorId: 0x10c4 }]
@@ -133,7 +153,9 @@ connectButton.onclick = async () => {
     } catch(e) {
     }
 
-    console.log("Settings done for :" + chip);
+}
+
+function postConnectControls() {
     lblConnTo.innerHTML = "<span style=color:#736a6a'>Connected to device: </span><b>" + chip + "</b>";
     lblConnTo.style.display = "block";
     $("#baudrates").prop("disabled", true);
@@ -145,6 +167,15 @@ connectButton.onclick = async () => {
     disconnectButton.style.display = "initial";
     eraseButton.style.display = "initial";
     filesDiv.style.display = "initial";
+}
+
+connectButton.onclick = async () => {
+    if(!connected)
+        await connectToDevice();
+
+    console.log("Settings done for :" + chip);
+    postConnectControls();
+
 }
 
 resetButton.onclick = async () => {
@@ -310,35 +341,60 @@ programButton.onclick = async () => {
     $('#v-pills-console-tab').click();
 }
 
+async function downloadAndFlash(fileURL) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', fileURL, true);
+    xhr.responseType = "blob";
+    xhr.send();
+    xhr.onload = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            var blob = new Blob([xhr.response], {type: "application/octet-stream"});
+            var reader = new FileReader();
+            reader.onload = (function(theFile) {
+                return function(e) {
+                    esploader.write_flash({fileArray: [{data:e.target.result, address:0x0000}], flash_size: 'keep'});
+                };
+            })(blob);
+            reader.readAsBinaryString(blob);
+        }
+    }
+    $('#v-pills-console-tab').click();
+}
+
 flashButton.onclick = async () => {
     let chipType = $("input[type='radio'][name='chipType']:checked").val();
     let framework = frameworkSelect.value;
     let deviceType = deviceTypeSelect.value;
     let flashFile = chipType + "_" + framework + "_" + deviceType + "_merged.bin";
     var file_server_url = FILE_SERVER_HOST;
-    
+
     progressMsgQS.style.display = "inline";
     if (FILE_SERVER_HOST == "local")
         file_server_url = document.location.href + "/images/";
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', file_server_url + flashFile, true);
-    xhr.responseType = "blob";
-    xhr.send();
-    xhr.onload = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            
-            var blob = new Blob([xhr.response], {type: "application/octet-stream"});
-            var reader = new FileReader();
+    await downloadAndFlash(file_server_url + flashFile);
+}
 
-            reader.onload = (function(theFile) {
-                return function(e) {
-                    esploader.write_flash({fileArray: [{data:e.target.result, address:0x0000}], flash_size: 'keep'});
-                };
-            })(blob);
-
-            reader.readAsBinaryString(blob);
-        }
+connectPreview.onclick = async () => {
+    await connectToDevice();
+    if (connected) {
+        $('#connectPreview').prop("disabled", true)
+        $('#flashCustom').prop("value", "Flash Device: " + chip);
+        $('#flashCustom').prop("disabled", false);
     }
-    $('#v-pills-console-tab').click();
+}
+
+flashCustom.onclick = async () => {
+    if(connected) {
+        if (chip != 'default'){
+            if (config.esp_chipset_type.toLowerCase() === chip.split('-')[0].toLowerCase()) {
+                await downloadAndFlash(config.firmware_image_url)
+            }
+            else
+                alert('Incompatible chipset for the firmare!');
+        }
+        else
+            alert('Chipset type not recognizable!');
+    }
+    postConnectControls();
 }
