@@ -17,6 +17,7 @@ const progressMsgQS = document.getElementById("progressMsgQS");
 const progressMsgDIY = document.getElementById("progressMsgDIY");
 const deviceTypeSelect = document.getElementById("device");
 const frameworkSelect = document.getElementById("frameworkSel");
+const chipSetsRadioGroup = document.getElementById("chipsets");
 const FILE_SERVER_HOST = "local";
 
 //import { Transport } from './cp210x-webusb.js'
@@ -35,38 +36,77 @@ let connected = false;
 let index = 1;
 let rmOptions = ["Fan", "GPIO", "Homekit Switch", "Led Light", " Multi Device", "Switch", "Temperature Sensor"];
 let rmOptValues = ["fan", "gpio", "homekit_switch", "led_light", "multi_device", "switch", "temperature_sensor"];
-let matterOptions = ["All Clusters App"];
+let matterOptions = ["x"];
 let matterOptValues = ["all-clusters-app_te6"];
-let config = null;
+
 
 disconnectButton.style.display = "none";
 eraseButton.style.display = "none";
+var config = [];
+var isDefault = true;
 
-function checkAutoLoad() {
+async function checkAutoLoad() {
     const urlParams = new URLSearchParams(window.location.search);
-    const tomlFileURL = urlParams.get('flashConfigURL');
-    if(tomlFileURL) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', tomlFileURL, true);
-        xhr.send();
-        xhr.onload = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                config = toml.parse(xhr.responseText);
-                $('#preview_esp_frm').html(config.esp_framework);
-                $('#preview_esp_chip').html(config.esp_chipset_type);
-                $('#preview_esp_device').html(config.esp_device_type);
-                $('#preview_example_name').html(config.example_name);
-                $('#preview_firmware_image').html(config.firmware_image_url);
-                $('#previewModal').click();
+    var tomlFileURL = urlParams.get('flashConfigURL');
+    if(!tomlFileURL)
+        tomlFileURL = document.location.href + "/config/default_config.toml";
+    else
+        isDefault = false;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', tomlFileURL, true);
+    xhr.send();
+    xhr.onload = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            config = toml.parse(xhr.responseText);
+            /*
+            $('#preview_esp_frm').html(config.esp_framework);
+            $('#preview_esp_chip').html(config.esp_chipset_type);
+            $('#preview_esp_device').html(config.esp_device_type);
+            $('#preview_example_name').html(config.example_name);
+            $('#preview_firmware_image').html(config.firmware_image_url);
+            $('#previewModal').click();
+            */
+            if(!isDefault) {
+                $("#qtLabel").html("Choose the firmware images listed below. <Br> You have chosen to try the firmware images from an <b><u>external source</u> - "
+                                            + tomlFileURL + "</b>");
             }
+
+            const frameworks = config["esp_frameworks"];
+            if (frameworks) {
+                frameworkSelect.innerHTML = "";
+                frameworks.forEach(framework => {
+                    var frameworkOption = framework.split(':');
+                    var option = document.createElement("option");
+                    option.value = frameworkOption[0];
+                    option.text = frameworkOption[1];
+                    frameworkSelect.appendChild(option);
+                });
+            }
+            if(frameworkSelect)
+            {
+                populateDeviceTypes(config[frameworkSelect.value]);
+                populateSupportedChipsets(config[frameworkSelect.value]);
+            }
+
+            return config;
         }
     }
 }
 
-checkAutoLoad();
+config = await checkAutoLoad();
 
-function populateDeviceTypes(product) {
+function populateDeviceTypes(imageConfig) {
     deviceTypeSelect.innerHTML = "";
+    const availableImages = imageConfig["images"];
+    availableImages.forEach(image => {
+        var imageOption = image.split(':');
+        var option = document.createElement("option");
+        option.value = imageOption[0];
+        option.text = imageOption[1];
+        deviceTypeSelect.appendChild(option);
+    });
+    /*
     if (product === "rainmaker"){
         for (let i = 0; i < rmOptions.length; i++)
         {
@@ -85,12 +125,45 @@ function populateDeviceTypes(product) {
             deviceTypeSelect.appendChild(option);
         }
     }
+    */
 }
 
-populateDeviceTypes("rainmaker");
+function populateSupportedChipsets(chipsetConfig) {
+    chipSetsRadioGroup.innerHTML = "";
+    const supportedChipSets = chipsetConfig["supported_chipsets"];
+    let i = 1;
+    supportedChipSets.forEach(chipset => {
+        var chipKV = chipset.split(":");
+        var div = document.createElement("div");
+        div.setAttribute("class", "form-check-inline");
+
+        var lblElement = document.createElement("label");
+        lblElement.setAttribute("class", "form-check-label");
+        lblElement.setAttribute("for", "radio" + i);
+        lblElement.innerHTML = chipKV[1] + "&nbsp;";
+
+        var inputElement = document.createElement("input");
+        inputElement.setAttribute("type", "radio");
+        inputElement.setAttribute("class", "form-check-input");
+        inputElement.name = "chipType";
+        inputElement.id = "radio" + i;
+        inputElement.value = chipKV[0]
+        if (i==1)
+            inputElement.checked = true;
+
+        lblElement.appendChild(inputElement);
+
+        div.appendChild (lblElement);
+
+        chipSetsRadioGroup.appendChild(div);
+
+        i++;
+    });
+}
 
 $('#frameworkSel').on('change', function() {
-    populateDeviceTypes(frameworkSelect.value);
+    populateDeviceTypes(config[frameworkSelect.value]);
+    populateSupportedChipsets(config[frameworkSelect.value]);
 });
 
 $(function () {
@@ -366,7 +439,7 @@ flashButton.onclick = async () => {
     let framework = frameworkSelect.value;
     let deviceType = deviceTypeSelect.value;
     let flashFile = chipType + "_" + framework + "_" + deviceType + "_merged.bin";
-    var file_server_url = FILE_SERVER_HOST;
+    var file_server_url = config.firmare_images_url;
 
     progressMsgQS.style.display = "inline";
     if (FILE_SERVER_HOST == "local")
