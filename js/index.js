@@ -327,7 +327,6 @@ disconnectButton.onclick = async () => {
     eraseButton.style.display = "none";
     lblConnTo.style.display = "none";
     alertDiv.style.display = "none";
-    consoleDiv.style.display = "initial";
 };
 
 consoleStartButton.onclick = async () => {
@@ -442,10 +441,13 @@ flashButton.onclick = async () => {
     var file_server_url = config.firmare_images_url;
 
     progressMsgQS.style.display = "inline";
-    if (FILE_SERVER_HOST == "local")
-        file_server_url = document.location.href + "/images/";
+    /*if (FILE_SERVER_HOST == "local")
+        file_server_url = document.location.href + "/images/";*/
 
     await downloadAndFlash(file_server_url + flashFile);
+    $("#progressMsgQS").html("You can download your phone app from respective app stores. <br> Android Play Store: "
+    + config[frameworkSelect.value].android_app_url +
+    "<br> IOS App Store: " + config[frameworkSelect.value].ios_app_url)
 }
 
 connectPreview.onclick = async () => {
