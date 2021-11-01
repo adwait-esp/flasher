@@ -1,0 +1,13 @@
+esp_frameworks =  ["matter:Matter"]
+
+firmare_images_url = "https://adwait-esp.github.io/flasher/images/"
+
+# product specific configs
+
+# supported images array which will be used to form the selection box
+# array elements will be used to form the Value:Text pairing
+[matter]
+images = [
+    "all-clusters-app_te6:All Clusters App"
+]
+supported_chipsets = ["esp32:ESP32", "esp32-c3:ESP32-C3"]
