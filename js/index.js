@@ -424,13 +424,13 @@ async function downloadAndFlash(fileURL) {
             var reader = new FileReader();
             reader.onload = (function(theFile) {
                 return function(e) {
+                    $('#v-pills-console-tab').click();
                     esploader.write_flash({fileArray: [{data:e.target.result, address:0x0000}], flash_size: 'keep'});
                 };
             })(blob);
             reader.readAsBinaryString(blob);
         }
     }
-    $('#v-pills-console-tab').click();
 }
 
 flashButton.onclick = async () => {
@@ -441,13 +441,17 @@ flashButton.onclick = async () => {
     var file_server_url = config.firmare_images_url;
 
     progressMsgQS.style.display = "inline";
-    /*if (FILE_SERVER_HOST == "local")
-        file_server_url = document.location.href + "/images/";*/
 
-    await downloadAndFlash(file_server_url + flashFile);
-    $("#progressMsgQS").html("You can download your phone app from respective app stores. <br> Android Play Store: "
-    + config[frameworkSelect.value].android_app_url +
-    "<br> IOS App Store: " + config[frameworkSelect.value].ios_app_url)
+    downloadAndFlash(file_server_url + flashFile);
+
+    $("#progressMsgQS").html("You can download your phone app from respective app stores. <br> <a href='" + config[frameworkSelect.value].android_app_url + 
+    "' target='_blank'><img src='../assets/gplay_download.png' height='60' width='150'></a>" +
+    "<a href='" + config[frameworkSelect.value].ios_app_url + "' target='_blank'><img src='../assets/appstore_download.png' height='60' width='150'></a>");
+    while (esploader.status === "started") {
+        await _sleep(5000);
+        console.log("waiting for flash write to complete ...");
+    }
+    $("#statusModal").click();
 }
 
 connectPreview.onclick = async () => {

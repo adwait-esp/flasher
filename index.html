@@ -21,11 +21,11 @@
     </head>
     <body>
         <div class="container">
-            <!-- Modal window for custom examples -->
-            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="previewModal" hidden>Open Modal</button>
+            <!-- Modal window for custom example review -->
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#reviewModal" id="previewModal" hidden>Open Modal</button>
 
             <!-- Modal -->
-            <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal fade" id="reviewModal" role="dialog">
               <div class="modal-dialog modal-lg">
 
                 <!-- Modal content-->
@@ -75,11 +75,40 @@
                     <input class="btn btn-info btn-sm" type="button" id="flashCustom" value="Flash" data-toggle="tooltip" data-dismiss="modal"
                           data-placement="right" title="This will download and flash the firmware image on your device" disabled/>
                           <br><br>
-                    <!--<button type="button" class="btn btn-default" data-dismiss="modal" id="flash_custom">Flash</button>-->
                   </div>
                 </div>
               </div>
             </div>
+            <!-- Modal for review end-->
+
+            <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal" id="statusModal" hidden>Open Modal</button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog modal-lg">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <img src="./assets/esp-logo.png" width="42" height="42" style="vertical-align:middle"></img>&emsp;
+                    <h4 class="modal-title"><span style="color: #17a2b8;"> ESP Firmware Flashing Status </span></h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  </div>
+                  <div class="modal-body" id="preview_body">
+                    <div><p>Flashing of firmaware is completed! Click the 'Reset' button on the Console Tab to reset your device with the new flashed firnware.
+                      <br><br>
+                      <b>Note: </b>You can download the phone app from the appstore and interact with your device.
+                    </p></div>
+                    <hr>
+                  </div>
+                  <div class="modal-footer">
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
 
             <div>
             <h1 align="center"><p><img src="./assets/esp-logo.png" width="42" height="42" style="vertical-align:middle"></img> ESP Launchpad</p></h1>
