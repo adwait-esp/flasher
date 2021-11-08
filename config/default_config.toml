@@ -17,12 +17,13 @@ images = [
     "temperature_sensor:Temperature Sensor"
     ]
 supported_chipsets = ["esp32:ESP32", "esp32s2:ESP32-S2", "esp32c3:ESP32-C3"]
-]
-android_app_url = ""
-ios_app_url = ""
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
 
 [matter]
 images = [
     "all-clusters-app_te6:All Clusters App"
 ]
 supported_chipsets = ["esp32:ESP32", "esp32-c3:ESP32-C3"]
+android_app_url = ""
+ios_app_url = ""
