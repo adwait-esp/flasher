@@ -90,12 +90,12 @@
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
-                    <img src="./assets/esp-logo.png" width="42" height="42" style="vertical-align:middle"></img>&emsp;
+                    <img src="./assets/esp_launchpad.svg" width="42" height="42" style="vertical-align:middle"></img>&emsp;
                     <h4 class="modal-title"><span style="color: #17a2b8;"> ESP Firmware Flashing Status </span></h4>
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                   </div>
                   <div class="modal-body" id="preview_body">
-                    <div><p>Flashing of firmaware is completed! Click the 'Reset' button on the Console Tab to reset your device with the new flashed firnware.
+                    <div><p>Flashing of firmware is completed! Click the 'Reset' button on the Console Tab to reset your device with the new flashed firnware.
                       <br><br>
                       <b>Note: </b>You can download the phone app from the appstore and interact with your device.
                     </p></div>
@@ -114,7 +114,7 @@
             <h1 align="center"><p><img src="./assets/esp_launchpad.svg" width="42" height="42" style="vertical-align:middle"></img> ESP Launchpad</p></h1>
             <h6 align="center"><span style="color:#736a6a">A Serial Flasher utility for Espressif chips</span></h6>
             <hr />
-            <div><p>Welcome to ESP Launchpad. This utility will help you flash the selected firmware binary onto your device.
+            <div><p class="esp-text">Welcome to ESP Launchpad. This utility will help you flash the selected firmware binary onto your device.
               Ensure you have connected your device to the serial USB port. Once you flash your device, 
               any earlier firmware would be overwritten.
             </p></div>
@@ -145,44 +145,16 @@
                     <div class="tab-pane fade show active" id="v-pills-quickTry" role="tabpanel" aria-labelledby="v-pills-quickTry-tab">
                           <span style="color:#736a6a"><b>Quick Try:</b> <span id="qtLabel">Choose from some of ESP's pre-built, out-of-the-box examples to flash and play</span></span>
                           <hr/>
-
                           <!--
-                          <div class="form-check-inline">
-                                <label class="form-check-label" for="radio0">
-                                  <input type="radio" class="form-check-input" id="radio0" name="chipType" value="auto" checked>Auto-Detect
-                                </label>
-                          </div>
-                          <div class="form-check-inline">
-                                <label class="form-check-label" for="radio1">
-                                  <input type="radio" class="form-check-input" id="radio1" name="chipType" value="esp32" checked>ESP32
-                                </label>
-                          </div>
-                          <div class="form-check-inline">
-                                <label class="form-check-label" for="radio2">
-                                  <input type="radio" class="form-check-input" id="radio2" name="chipType" value="esp32s2">ESP32-S2
-                                </label>
-                          </div>
-                          <div class="form-check-inline">
-                                <label class="form-check-label" for="radio3">
-                                  <input type="radio" class="form-check-input" id="radio3" name="chipType" value="esp32c3">ESP32-C3
-                                </label>
-                          </div>
-                          
-                          <div class="form-check-inline">
-                                <label class="form-check-label" for="radio4">
-                                  <input type="radio" class="form-check-input" id="radio4" name="chipType" value="esp32s3">ESP32-S3
-                                </label>
-                          </div>
-                          <hr/>-->
                           <label for="framework" id="lblFrameworks"><b>Select Framework &emsp;&emsp;&emsp; : &emsp;&emsp;&nbsp;</b></label>
                           <select name="framework" id="frameworkSel">
                               <option value="rainmaker">RainMaker</option>
                               <option value="matter">Matter</option>
                           </select>
 
-                          <hr/>
+                          <hr/>-->
                           
-                          <label for="device" id="lblDeviceType"><b>Select Device Type &nbsp; &emsp; &emsp;: &emsp; &emsp;</b></label>
+                          <label for="device" id="lblDeviceType"><b>Select Application &nbsp; &nbsp; &emsp; &emsp;: &emsp; &emsp;</b></label>
                           <select name="device" id="device">
                           </select>
                           <hr/>
@@ -240,7 +212,7 @@
                     <!-- Console section -->
                     <div class="tab-pane fade" id="v-pills-console" role="tabpanel" aria-labelledby="v-pills-console-tab">
                     
-                      <h3>Console </h3>
+                      <!--<h3>Console </h3> -->
                       <input class="btn btn-info" type="button" id="consoleStartButton" value="Reset" disabled data-toggle="tooltip" 
                       data-placement="right" title="Reset your device"/>
                       <div id="resetMessage" style="display:none">This will reset your device  <input class="btn btn-info" type="button" id="resetButton" value="Continue" data-toggle="tooltip" 

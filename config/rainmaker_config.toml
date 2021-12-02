@@ -1,22 +1,69 @@
-esp_frameworks =  ["rainmaker:RainMaker"]
+esp_toml_version = 1.0
 
-firmare_images_url = "https://adwait-esp.github.io/flasher/images/"
+firmware_images_url = "https://adwait-esp.github.io/flasher/images/"
 
-# product specific configs
+supported_apps = ["RainMaker-Fan", "RainMaker-GPIO", "RainMaker-Homekit Switch", "RainMaker-Led Light", "RainMaker-Multi Device", "RainMaker-Switch", "RainMaker-Temperature Sensor"]
 
-# supported images array which will be used to form the selection box
-# array elements will be used to form the Value:Text pairing
-[rainmaker]
-images = [
-    "fan:Fan", 
-    "gpio:GPIO", 
-    "homekit_switch:Homekit Switch", 
-    "led_light:Led Light", 
-    "multi_device:Multi Device", 
-    "switch:Switch",
-    "temperature_sensor:Temperature Sensor"
-    ]
-supported_chipsets = ["esp32:ESP32", "esp32s2:ESP32-S2", "esp32c3:ESP32-C3"]
-]
-android_app_url = ""
-ios_app_url = ""
+
+[RainMaker-Fan]
+framework = "RainMaker"
+chipsets = ["ESP32", "ESP32_S2", "ESP32_C3"]
+image.esp32 = "esp32_rainmaker_fan_merged.bin"
+image.esp32s2 = "esp32s2_rainmaker_fan_merged.bin"
+image.esp32c3 = "esp32c3_rainmaker_fan_merged.bin"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
+
+[RainMaker-GPIO]
+framework = "RainMaker"
+chipsets = ["ESP32", "ESP32_S2", "ESP32_C3"]
+image.esp32 = "esp32_rainmaker_fan_merged.bin"
+image.esp32_s2 = "esp32s2_rainmaker_fan_merged.bin"
+image.esp32_c3 = "esp32c3_rainmaker_fan_merged.bin"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
+
+[RainMaker-Homekit Switch]
+framework = "RainMaker"
+chipsets = ["ESP32", "ESP32_S2", "ESP32_C3"]
+image.esp32 = "esp32_rainmaker_homekit_switch_merged.bin"
+image.esp32_s2 = "esp32s2_rainmaker_homekit_switch_merged.bin"
+image.esp32_c3 = "esp32c3_rainmaker_homekit_switch_merged.bin"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
+
+[RainMaker-Led Light]
+framework = "RainMaker"
+chipsets = ["ESP32", "ESP32_S2", "ESP32_C3"]
+image.esp32 = "esp32_rainmaker_led_light_merged.bin"
+image.esp32_s2 = "esp32s2_rainmaker_led_light_merged.bin"
+image.esp32_c3 = "esp32c3_rainmaker_led_light_merged.bin"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
+
+[RainMaker-Multi Device]
+framework = "RainMaker"
+chipsets = ["ESP32", "ESP32_S2", "ESP32_C3"]
+image.esp32 = "esp32_rainmaker_multi_device_merged.bin"
+image.esp32_s2 = "esp32s2_rainmaker_multi_device_merged.bin"
+image.esp32_c3 = "esp32c3_rainmaker_multi_device_merged.bin"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
+
+[RainMaker-Switch]
+framework = "RainMaker"
+chipsets = ["ESP32", "ESP32_S2", "ESP3_C3"]
+image.esp32 = "esp32_rainmaker_switch_merged.bin"
+image.esp32_s2 = "esp32s2_rainmaker_switch_merged.bin"
+image.esp32_c3 = "esp32c3_rainmaker_switch_merged.bin"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
+
+[RainMaker-Temperature Sensor]
+framework = "RainMaker"
+chipsets = ["ESP32", "ESP32_S2", "ESP32_C3"]
+image.esp32 = "esp32_rainmaker_temperature_sensor_merged.bin"
+image.esp32_s2 = "esp32s2_rainmaker_temperature_sensor_merged.bin"
+image.esp32_c3 = "esp32c3_rainmaker_temperature_sensor_merged.bin"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
+ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"

@@ -33,12 +33,8 @@ let chip = "default";
 let esploader;
 let file1 = null;
 let connected = false;
-let index = 1;
-let rmOptions = ["Fan", "GPIO", "Homekit Switch", "Led Light", " Multi Device", "Switch", "Temperature Sensor"];
-let rmOptValues = ["fan", "gpio", "homekit_switch", "led_light", "multi_device", "switch", "temperature_sensor"];
-let matterOptions = ["x"];
-let matterOptValues = ["all-clusters-app_te6"];
-
+let ios_app_url = "";
+let android_app_url = "";
 
 disconnectButton.style.display = "none";
 eraseButton.style.display = "none";
@@ -59,39 +55,66 @@ async function checkAutoLoad() {
     xhr.onload = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             config = toml.parse(xhr.responseText);
-            /*
-            $('#preview_esp_frm').html(config.esp_framework);
-            $('#preview_esp_chip').html(config.esp_chipset_type);
-            $('#preview_esp_device').html(config.esp_device_type);
-            $('#preview_example_name').html(config.example_name);
-            $('#preview_firmware_image').html(config.firmware_image_url);
-            $('#previewModal').click();
-            */
+
             if(!isDefault) {
-                $("#qtLabel").html("Choose the firmware images listed below. <Br> You have chosen to try the firmware images from an <b><u>external source</u> - "
+                $("#qtLabel").html("Choose from the firmware images listed below. <Br> You have chosen to try the firmware images from an <b><u>external source</u> - "
                                             + tomlFileURL + "</b>");
             }
+            try {
+                if (parseFloat(config["esp_toml_version"]) === 1.0)
+                    buildQuickTryUI_v1_0();
 
+                else
+                    alert("Unsupported config version used!!")
+            }
+            catch (err){
+                alert ("Unsupported config version used -" + err.message)
+            }
+
+            /*
             const frameworks = config["esp_frameworks"];
             if (frameworks) {
                 frameworkSelect.innerHTML = "";
                 frameworks.forEach(framework => {
-                    var frameworkOption = framework.split(':');
+                    //var frameworkOption = framework.split(':');
                     var option = document.createElement("option");
-                    option.value = frameworkOption[0];
-                    option.text = frameworkOption[1];
+                    option.value = framework.toLowerCase();
+                    option.text = framework;
                     frameworkSelect.appendChild(option);
                 });
-            }
-            if(frameworkSelect)
-            {
-                populateDeviceTypes(config[frameworkSelect.value]);
-                populateSupportedChipsets(config[frameworkSelect.value]);
-            }
+            }*/
+
+            //if(frameworkSelect)
+            //{
+                //populateDeviceTypes(config[frameworkSelect.value]);
+                //populateSupportedChipsets(config[frameworkSelect.value]);
+            //}
 
             return config;
         }
     }
+}
+
+
+//Parsing of toml based on v1.0 and builing UI accordingly.
+function buildQuickTryUI_v1_0() {
+    const supported_apps = config["supported_apps"]
+    if(supported_apps) {
+        addDeviceTypeOption(supported_apps);
+        populateSupportedChipsets(config[supported_apps[0]]);
+    }
+    setAppURLs(config[supported_apps[0]]);
+}
+
+function addDeviceTypeOption(apps) {
+    deviceTypeSelect.innerHTML = "";
+    apps.forEach(app => {
+        var app_config = config[app];
+            var option = document.createElement("option");
+            option.value = app;
+            option.text = app;
+            deviceTypeSelect.appendChild(option);
+    });
 }
 
 config = await checkAutoLoad();
@@ -106,48 +129,28 @@ function populateDeviceTypes(imageConfig) {
         option.text = imageOption[1];
         deviceTypeSelect.appendChild(option);
     });
-    /*
-    if (product === "rainmaker"){
-        for (let i = 0; i < rmOptions.length; i++)
-        {
-            var option = document.createElement("option");
-            option.value = rmOptValues[i];
-            option.text = rmOptions[i];
-            deviceTypeSelect.appendChild(option);
-        }
-    }
-    else if (product == "matter"){
-        for (let i = 0; i < matterOptions.length; i++)
-        {
-            var option = document.createElement("option");
-            option.value = matterOptValues[i];
-            option.text = matterOptions[i];
-            deviceTypeSelect.appendChild(option);
-        }
-    }
-    */
 }
 
-function populateSupportedChipsets(chipsetConfig) {
+function populateSupportedChipsets(deviceConfig) {
     chipSetsRadioGroup.innerHTML = "";
-    const supportedChipSets = chipsetConfig["supported_chipsets"];
+    const supportedChipSets = deviceConfig["chipsets"];
     let i = 1;
     supportedChipSets.forEach(chipset => {
-        var chipKV = chipset.split(":");
+        //var chipKV = chipset.split(":");
         var div = document.createElement("div");
         div.setAttribute("class", "form-check-inline");
 
         var lblElement = document.createElement("label");
         lblElement.setAttribute("class", "form-check-label");
         lblElement.setAttribute("for", "radio" + i);
-        lblElement.innerHTML = chipKV[1] + "&nbsp;";
+        lblElement.innerHTML = chipset + "&nbsp;";
 
         var inputElement = document.createElement("input");
         inputElement.setAttribute("type", "radio");
         inputElement.setAttribute("class", "form-check-input");
         inputElement.name = "chipType";
         inputElement.id = "radio" + i;
-        inputElement.value = chipKV[0]
+        inputElement.value = deviceConfig["image." + chipset.toLowerCase()]
         if (i==1)
             inputElement.checked = true;
 
@@ -161,9 +164,19 @@ function populateSupportedChipsets(chipsetConfig) {
     });
 }
 
+function setAppURLs(appConfig) {
+    ios_app_url = appConfig.ios_app_url;
+    android_app_url = appConfig.android_app_url;
+}
+
 $('#frameworkSel').on('change', function() {
-    populateDeviceTypes(config[frameworkSelect.value]);
-    populateSupportedChipsets(config[frameworkSelect.value]);
+    //populateDeviceTypes(config[frameworkSelect.value]);
+    addDeviceTypeOption(config["supported_apps"], frameworkSelect.value);
+    setAppURLs(frameworkSelect.value)
+});
+
+$('#device').on('change', function() {
+    populateSupportedChipsets(config[deviceTypeSelect.value]);
 });
 
 $(function () {
@@ -434,21 +447,21 @@ async function downloadAndFlash(fileURL) {
 }
 
 flashButton.onclick = async () => {
-    let chipType = $("input[type='radio'][name='chipType']:checked").val();
-    let framework = frameworkSelect.value;
-    let deviceType = deviceTypeSelect.value;
-    let flashFile = chipType + "_" + framework + "_" + deviceType + "_merged.bin";
-    var file_server_url = config.firmare_images_url;
+    //let chipType = $("input[type='radio'][name='chipType']:checked").val();
+    //let framework = frameworkSelect.value;
+    //let deviceType = deviceTypeSelect.value;
+    let flashFile = $("input[type='radio'][name='chipType']:checked").val();
+    var file_server_url = config.firmware_images_url;
 
     progressMsgQS.style.display = "inline";
 
     downloadAndFlash(file_server_url + flashFile);
 
-    $("#progressMsgQS").html("You can download your phone app from respective app stores. <br> <a href='" + config[frameworkSelect.value].android_app_url + 
+    $("#progressMsgQS").html("You can download your phone app from respective app stores. <br> <a href='" + android_app_url +
     "' target='_blank'><img src='../assets/gplay_download.png' height='60' width='150'></a>" +
-    "<a href='" + config[frameworkSelect.value].ios_app_url + "' target='_blank'><img src='../assets/appstore_download.png' height='60' width='150'></a>");
+    "<a href='" + ios_app_url + "' target='_blank'><img src='../assets/appstore_download.png' height='60' width='150'></a>");
     while (esploader.status === "started") {
-        await _sleep(5000);
+        await _sleep(3000);
         console.log("waiting for flash write to complete ...");
     }
     $("#statusModal").click();
@@ -467,7 +480,7 @@ flashCustom.onclick = async () => {
     if(connected) {
         if (chip != 'default'){
             if (config.esp_chipset_type.toLowerCase() === chip.split('-')[0].toLowerCase()) {
-                await downloadAndFlash(config.firmware_image_url)
+                await downloadAndFlash(config.firmware_images_url)
             }
             else
                 alert('Incompatible chipset for the firmare!');
