@@ -18,9 +18,7 @@ const progressMsgDIY = document.getElementById("progressMsgDIY");
 const deviceTypeSelect = document.getElementById("device");
 const frameworkSelect = document.getElementById("frameworkSel");
 const chipSetsRadioGroup = document.getElementById("chipsets");
-const FILE_SERVER_HOST = "local";
 
-//import { Transport } from './cp210x-webusb.js'
 import { Transport } from './webserial.js'
 import { ESPLoader } from './ESPLoader.js'
 
@@ -41,7 +39,8 @@ eraseButton.style.display = "none";
 var config = [];
 var isDefault = true;
 
-async function checkAutoLoad() {
+// Build the Quick Try UI using the config toml file. If external path is not specified, pick up the default config
+async function buildQuickTryUI() {
     const urlParams = new URLSearchParams(window.location.search);
     var tomlFileURL = urlParams.get('flashConfigURL');
     if(!tomlFileURL)
@@ -117,8 +116,9 @@ function addDeviceTypeOption(apps) {
     });
 }
 
-config = await checkAutoLoad();
+config = await buildQuickTryUI();
 
+/*
 function populateDeviceTypes(imageConfig) {
     deviceTypeSelect.innerHTML = "";
     const availableImages = imageConfig["images"];
@@ -129,7 +129,7 @@ function populateDeviceTypes(imageConfig) {
         option.text = imageOption[1];
         deviceTypeSelect.appendChild(option);
     });
-}
+}*/
 
 function populateSupportedChipsets(deviceConfig) {
     chipSetsRadioGroup.innerHTML = "";
@@ -307,7 +307,7 @@ addFile.onclick = async () => {
     var btnName = "button" + rowCount;
     element3.name = btnName;
     element3.setAttribute('class', "btn");
-    element3.setAttribute('value', 'Remove'); // or element1.value = "button";
+    element3.setAttribute('value', 'Remove');
     element3.onclick = function() {
             removeRow(btnName);
     }
@@ -446,10 +446,21 @@ async function downloadAndFlash(fileURL) {
     }
 }
 
+
+// Based on the configured App store links, show the respective download links.
+function buildAppLinks(){
+    let appURLsHTML = "You can download phone app from the app store and interact with your device. <br>";
+    if(android_app_url !== "")
+        appURLsHTML += "<a href='" + android_app_url + "' target='_blank'><img src='../assets/gplay_download.png' height='60' width='150'></a>"
+    
+    if(ios_app_url)
+        appURLsHTML += "<a href='" + ios_app_url + "' target='_blank'><img src='../assets/appstore_download.png' height='60' width='150'></a>"
+    
+    return appURLsHTML;
+}
+
+
 flashButton.onclick = async () => {
-    //let chipType = $("input[type='radio'][name='chipType']:checked").val();
-    //let framework = frameworkSelect.value;
-    //let deviceType = deviceTypeSelect.value;
     let flashFile = $("input[type='radio'][name='chipType']:checked").val();
     var file_server_url = config.firmware_images_url;
 
@@ -457,9 +468,8 @@ flashButton.onclick = async () => {
 
     downloadAndFlash(file_server_url + flashFile);
 
-    $("#progressMsgQS").html("You can download your phone app from respective app stores. <br> <a href='" + android_app_url +
-    "' target='_blank'><img src='../assets/gplay_download.png' height='60' width='150'></a>" +
-    "<a href='" + ios_app_url + "' target='_blank'><img src='../assets/appstore_download.png' height='60' width='150'></a>");
+    $("#progressMsgQS").html(buildAppLinks());
+    $("#appDownloadLink").html(buildAppLinks());
     while (esploader.status === "started") {
         await _sleep(3000);
         console.log("waiting for flash write to complete ...");
