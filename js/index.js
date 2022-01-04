@@ -326,8 +326,17 @@ function removeRow(btnName) {
     }
 }
 
+// to be called on disconnect - remove any stale references of older connections if any
+function cleanUp() {
+    device = null;
+    transport = null;
+    this.chip = null;
+}
+
 disconnectButton.onclick = async () => {
-    await transport.disconnect();
+    if(transport)
+        await transport.disconnect();
+
     term.clear();
     connected = false;
     $("#baudrates").prop("disabled", false);
@@ -340,6 +349,7 @@ disconnectButton.onclick = async () => {
     eraseButton.style.display = "none";
     lblConnTo.style.display = "none";
     alertDiv.style.display = "none";
+    cleanUp();
 };
 
 consoleStartButton.onclick = async () => {
