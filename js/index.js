@@ -28,6 +28,7 @@ term.open(terminal);
 let device = null;
 let transport;
 let chip = "default";
+let chipDesc = "default desc"
 let esploader;
 let file1 = null;
 let connected = false;
@@ -142,16 +143,16 @@ function populateSupportedChipsets(deviceConfig) {
 
         var lblElement = document.createElement("label");
         lblElement.setAttribute("class", "form-check-label");
-        lblElement.setAttribute("for", "radio" + i);
+        lblElement.setAttribute("for", "radio-" + chipset);
         lblElement.innerHTML = chipset + "&nbsp;";
 
         var inputElement = document.createElement("input");
         inputElement.setAttribute("type", "radio");
         inputElement.setAttribute("class", "form-check-input");
         inputElement.name = "chipType";
-        inputElement.id = "radio" + i;
+        inputElement.id = "radio-" + chipset;
         inputElement.value = deviceConfig["image." + chipset.toLowerCase()]
-        if (i==1)
+        if (chipset.toLowerCase() === chip.toLowerCase())
             inputElement.checked = true;
 
         lblElement.appendChild(inputElement);
@@ -222,6 +223,7 @@ function _sleep(ms) {
 
 
 async function connectToDevice() {
+    let chipDetails = null;
     if (device === null) {
         device = await navigator.serial.requestPort({
             filters: [{ usbVendorId: 0x10c4 }]
@@ -233,7 +235,11 @@ async function connectToDevice() {
         esploader = new ESPLoader(transport, baudrates.value, term);
         connected = true;
 
-        chip = await esploader.main_fn();
+        chipDetails = await esploader.main_fn();
+        if (chipDetails) {
+            chip = chipDetails[1];
+            chipDesc = chipDetails[0];
+        }
 
         await esploader.flash_id();
     } catch(e) {
@@ -242,7 +248,7 @@ async function connectToDevice() {
 }
 
 function postConnectControls() {
-    lblConnTo.innerHTML = "<b><span style='color:#17a2b8'>Connected to device: </span>" + chip + "</b>";
+    lblConnTo.innerHTML = "<b><span style='color:#17a2b8'>Connected to device: </span>" + chipDesc + "</b>";
     lblConnTo.style.display = "block";
     $("#baudrates").prop("disabled", true);
     $("#flashButton").prop("disabled", false);
@@ -253,6 +259,7 @@ function postConnectControls() {
     disconnectButton.style.display = "initial";
     eraseButton.style.display = "initial";
     filesDiv.style.display = "initial";
+    $('input:radio[id="radio-' + chip + '"]').attr('checked', true);
 }
 
 connectButton.onclick = async () => {
