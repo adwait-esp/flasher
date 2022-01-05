@@ -461,10 +461,10 @@ async function downloadAndFlash(fileURL) {
 function buildAppLinks(){
     let appURLsHTML = "You can download phone app from the app store and interact with your device. <br>";
     if(android_app_url !== "")
-        appURLsHTML += "<a href='" + android_app_url + "' target='_blank'><img src='../assets/gplay_download.png' height='60' width='150'></a>"
+        appURLsHTML += "<a href='" + android_app_url + "' target='_blank'><img src='./assets/gplay_download.png' height='60' width='150'></a>"
     
     if(ios_app_url)
-        appURLsHTML += "<a href='" + ios_app_url + "' target='_blank'><img src='../assets/appstore_download.png' height='60' width='150'></a>"
+        appURLsHTML += "<a href='" + ios_app_url + "' target='_blank'><img src='./assets/appstore_download.png' height='60' width='150'></a>"
     
     return appURLsHTML;
 }
