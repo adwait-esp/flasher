@@ -178,6 +178,7 @@ $('#frameworkSel').on('change', function() {
 
 $('#device').on('change', function() {
     populateSupportedChipsets(config[deviceTypeSelect.value]);
+    setAppURLs(config[deviceTypeSelect.value])
 });
 
 $(function () {
