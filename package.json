@@ -1,0 +1,9 @@
+{
+	"name": "esp-launchpad",
+	"dependencies": {
+		"crypto-js": "^4.1.1",
+		"toml-js": "^0.0.8",
+		"xterm": "^4.17.0",
+		"xterm-addon-fit": "^0.5.0"
+	}
+}

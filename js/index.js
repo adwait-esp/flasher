@@ -18,12 +18,19 @@ const progressMsgDIY = document.getElementById("progressMsgDIY");
 const deviceTypeSelect = document.getElementById("device");
 const frameworkSelect = document.getElementById("frameworkSel");
 const chipSetsRadioGroup = document.getElementById("chipsets");
+const mainContainer = document.getElementById("mainContainer");
+let resizeTimeout = false;
 
 import { Transport } from './webserial.js'
 import { ESPLoader } from './ESPLoader.js'
 
-let term = new Terminal({cols:100, rows:25, fontSize: 14});
+const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+
+let term = new Terminal({cols:getTerminalColumns(), rows:23, fontSize: 14});
+let fitAddon = new FitAddon.FitAddon();
+term.loadAddon(fitAddon);
 term.open(terminal);
+fitAddon.fit();
 
 let device = null;
 let transport;
@@ -275,12 +282,14 @@ connectButton.onclick = async () => {
 
 }
 
+
 resetButton.onclick = async () => {
-    resetMessage.style.display = "none";
+    //resetMessage.style.display = "none";
+    $('#closeResetModal').click();
     await transport.setDTR(false);
     await new Promise(resolve => setTimeout(resolve, 100));
     await transport.setDTR(true);
-    consoleStartButton.style.display = "block";
+    //consoleStartButton.style.display = "block";
 }
 
 eraseButton.onclick = async () => {
@@ -314,13 +323,13 @@ addFile.onclick = async () => {
     // Column 3  - Remove File
     var cell3 = row.insertCell(2);
     var element3 = document.createElement("input");
-    element3.type = "button";
-    var btnName = "button" + rowCount;
+    element3.type = "image";
+    element3.src = "assets/icons/remove.png";
+    var btnName = "rem-" + rowCount;
     element3.name = btnName;
-    element3.setAttribute('class', "btn");
-    element3.setAttribute('value', 'Remove');
     element3.onclick = function() {
             removeRow(btnName);
+            return false;
     }
     cell3.appendChild(element3);
 }
@@ -370,8 +379,9 @@ consoleStartButton.onclick = async () => {
         });
         transport = new Transport(device);
     }
-    resetMessage.style.display = "block";
-    consoleStartButton.style.display = "none";
+    //resetMessage.style.display = "block";
+    //consoleStartButton.style.display = "none";
+    $('#resetConfirmation').click();
 
     await transport.disconnect();
     await transport.connect();
@@ -499,6 +509,7 @@ flashButton.onclick = async () => {
     esploader.status = "started";
 }
 
+/*
 connectPreview.onclick = async () => {
     await connectToDevice();
     if (connected) {
@@ -521,4 +532,18 @@ flashCustom.onclick = async () => {
             alert('Chipset type not recognizable!');
     }
     postConnectControls();
+}*/
+
+function getTerminalColumns() {
+    const mainContainerWidth = mainContainer?.offsetWidth || 1320;
+    return Math.round(mainContainerWidth / 8.25); 
 }
+
+function resizeTerminal() {
+    fitAddon && fitAddon.fit();
+}
+
+$( window ).resize(function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(resizeTerminal, 300);
+});
