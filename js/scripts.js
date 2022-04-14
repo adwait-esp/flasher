@@ -4,6 +4,8 @@ $( document ).ready(function() {
 
 $( "button.nav-link.icon-button" ).on( "click", handleNavMobileNavLinkClick);
 $( "h4.topic" ).on( "click", handleNavMobileNavLinkClick);
+$( "h6.trynow" ).on( "click", handleNavMobileNavLinkClick);
+
 const headerMenu = document.getElementById("navbarSupportedContent");
 
 function init() {
@@ -13,6 +15,7 @@ function init() {
     
     $(".navbar-nav .nav-item[data-role='nav-menu-tab']").on("click", handleTabChange);
     $( "h4.topic" ).on( "click", handleTabChange);
+    $( "h6.trynow" ).on( "click", handleTabChange);
 }
 
 function handleTabChange(e) {

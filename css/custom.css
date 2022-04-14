@@ -212,6 +212,10 @@ td img {
 }
 
 /* About sections css */
+.about-container {
+    line-height: 36px;
+}
+
 .about-container p,span{
     text-align: justify;
     text-justify: inter-word;
@@ -219,12 +223,30 @@ td img {
 
 .about-container .topic{
    color: #e63f36;
-   cursor: pointer;
 }
 
-.about-container .topic:hover{
+.about-container .trynow{
+    cursor: pointer;
+    width: 100px;
+    padding: 5px;
+    text-align: center;
+    background-color:darkgrey;
+ }
+
+ .about-container .trynow:hover{
+     text-decoration: underline;
+ }
+
+.about-container .anchor {
+    color:#e63f36;
+    text-decoration: none;
+}
+
+.about-container .anchor:hover{
+    color:#e63f36;
     text-decoration: underline;
 }
+
 .hide{
     display: none;
 }

@@ -8,7 +8,7 @@ const eraseButton = document.getElementById("eraseButton");
 const programButton = document.getElementById("programButton");
 const filesDiv = document.getElementById("files");
 const terminal = document.getElementById("terminal");
-const consoleDiv = document.getElementById("console");
+const ensureConnect = document.getElementById("ensureConnect");
 const lblConnTo = document.getElementById("lblConnTo");
 const table = document.getElementById('fileTable');
 const alertDiv = document.getElementById('alertDiv');
@@ -265,6 +265,7 @@ function postConnectControls() {
     $("#flashButton").prop("disabled", false);
     $("#programButton").prop("disabled", false);
     $("#consoleStartButton").prop("disabled", false);
+    ensureConnect.style.display = "none"
     settingsWarning.style.display = "initial";
     connectButton.style.display = "none";
     disconnectButton.style.display = "initial";
@@ -369,6 +370,7 @@ disconnectButton.onclick = async () => {
     eraseButton.style.display = "none";
     lblConnTo.style.display = "none";
     alertDiv.style.display = "none";
+    ensureConnect.style.display = "initial";
     cleanUp();
 };
 

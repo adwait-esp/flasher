@@ -72,13 +72,13 @@
               </div>
             </div>
         </div>
-
+        <div id="main">
         <!-- Responsive navbar-->
         <nav class="navbar navbar-expand-lg">
             <div class="container">
-                <a class="navbar-brand" href="#">
+                <h4 class="topic"  data-target-tab-panel-id="about">
                     <img src="assets/logo-v1.png" class="logo" />
-                </a>
+                </h4>
                 <!-- <span>A serial flasher utility for Espressif chips</span> -->
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -137,12 +137,10 @@
             <div class="text-center mt-3 intro-text">
                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
                     <label style="display:none" id="lblConnTo"><b>Connected to device: </b></label>
-                    <p>ESP Launchpad helps you to flash the selected firmware binary onto your device.
-                    <br />Ensure you have connected your device to the serial USB port. Once you flash your device, any earlier firmware would be overwritten.</p>
+                    <p><span>ESP Launchpad helps you to flash the selected firmware binary onto your device.</span>
+                    <br /><span id="ensureConnect"> Ensure you have connected your device to the serial USB port. Once you flash your device, any earlier firmware would be overwritten.</span>
+                    </p>
 
-                </div>
-                <!-- Safari not supported error message-->
-                <div id="safariErr" style="display:none"><p align="center" style="color:red">This tool is not supported on Safari browser!</p>
                 </div>
             </div>
         </div>
@@ -298,26 +296,35 @@
                 <div class="col-xs-12">
                     <span>
                         ESP Launchpad is a web based tool, available for flashing firmware application to the ESP32 device connected via
-                        USB serial port. Just plug in your device to the terminal, connect and choose the firmware application as per
-                        the ESP32 chipset type (viz. S2, C3) and flash. This easy, 4 step process will flash the firmware on to the
-                        connected device and bring it into play as you want it to be.
+                        USB serial port.
                     </span>
+                    <p>
+                        There are two modes available for using this tool:
+                        <ul>
+                          <li><a class="anchor" href="#qsDiv">Quick Try</a> : 4 Easy Steps - Plug, Connect, Choose Built-In Firmware Image, Flash!</li>
+                          <li><a class="anchor" href="#diyDiv">DIY</a> : For Advanced Users, use your own pre-built Firmware Image from local storage and Flash!</li>
+                        </ul>
+
+                        You can even build and <a class="anchor" href="#publishDiv">Publish your own Apps </a> for ESP32 using ESP Launchpad.
+                    </p>
                 </div>
                 <!-- Quick Try -->
-                <div class="col-xs-12 mt-5 ">
-                    <h4 class="topic mb-4" data-target-tab-panel-id="quickstart"><b>Quick Try</b></h4>
+                <div class="col-xs-12 mt-5 " id="qsDiv">
+                    <h4 class="topic mb-4"><b>Quick Try</b></h4>
                     <p>
                         ESP currently provides a few built in, ready to use examples that can be flashed on the ESP32 devices. You can
                         choose one of the built in firmware application for either RainMaker or Matter, and as per the chipset type.
-                        Just connect your ESP32 device to the serial USB port. Using the web based tool, connect to your device. Choose
+                        Just plug in your ESP32 device to the serial USB port. Use connect option in the menu to connect to your ESP32 device. Choose
                         the firmware from the built-in firmware example set. Click Flash!
                     </p>
                     <p>The firmware will be flashed on to your connected device. You can watch the progress of the firmware flashing in
                         the console window.</p>
+                    <p>This easy, 4 step process will flash the firmware on to the connected device and bring it into play as you want it to be.</p>
+                    <h6 class="trynow mb-4" data-target-tab-panel-id="quickstart"><b>Try Now !</b></h6>
                 </div>
                 <!-- DIY -->
-                <div class="col-xs-12 mt-5 ">
-                    <h4 class="topic mb-4" data-target-tab-panel-id="diy"><b>DIY</b></h4>
+                <div class="col-xs-12 mt-5 " id="diyDiv">
+                    <h4 class="topic mb-4" ><b>DIY</b></h4>
                     <p>
                         You can build your own firmware binaries using the ESP IDF tools. These firmware images can then be flashed from
                         your local machine to the connected device. Just connect your ESP32 device to the serial USB port. Using the web
@@ -329,9 +336,10 @@
                     <p>The firmware will be flashed on to your connected device. You can watch the progress of the firmware flashing in
                         the console window.
                     </p>
+                    <h6 class="trynow mb-4" data-target-tab-panel-id="diy"><b>Try Now !</b></h6>
                 </div>
                 <!-- Publish your own firmware apps -->
-                <div class="col-xs-12 mt-5 ">
+                <div class="col-xs-12 mt-5" id="publishDiv">
                     <h4 class=" mb-4" style="color: #e63f36;"><b>Publish your own firmware apps</b></h4>
                     <p>You can build your own firmware applications and make them publicly available for flashing via ESP Launchpad web
                         based tool.</p>
@@ -345,6 +353,10 @@
             </div>
         </div>
         <!-- About us tab content - end -->
+    </div>
+    <!-- Safari not supported error message-->
+    <div id="safariErr" style="display:none"><p align="center" style="color:red">This tool is not supported on Safari browser!</p>
+    </div>
 
         <footer class="container footer mt-auto py-3 bg-light">
             <div class="container text-center">
