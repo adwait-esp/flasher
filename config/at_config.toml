@@ -1,0 +1,14 @@
+esp_toml_version = 1.0
+
+firmware_images_url = "https://download.espressif.com/esp_at/factory/"
+
+supported_apps = ["ESP-AT-V3.0.0.0", "ESP-AT-V2.4.2.0"]
+
+[ESP-AT-V3.0.0.0]
+chipsets = ["ESP32-C2-2MB", "ESP32-C2-4MB"]
+image.esp32-c2-2mb = "esp32c2_2mb_v3.0.0.0.bin"
+image.esp32-c2-4mb = "esp32c2_4mb_v3.0.0.0.bin"
+
+[ESP-AT-V2.4.2.0]
+chipsets = ["ESP32-C3-MINI-1"]
+image.esp32-c3-mini-1 = "esp32c3_mini_1_v2.4.2.0.bin"
