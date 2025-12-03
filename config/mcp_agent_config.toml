@@ -15,4 +15,4 @@ image.esp32-s3 = "echoear-agent-firmware.bin"
 
 android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
 ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
-readme.text = "https://raw.githubusercontent.com/espressif/esp-rainmaker/master/examples/fan/README.md"
+readme.text = "https://adwait-esp.github.io/flasher/images/mcpagent/README.md"
