@@ -13,6 +13,6 @@ image.esp32-s3 = "echoear-agent-firmware.bin"
 #image.esp32-s3.addresses = ["0x0","0x8000","0x1c000", "0x30000", "0xe2c000"]
 
 
-android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.rainmaker"
-ios_app_url = "https://apps.apple.com/app/esp-rainmaker/id1497491540"
+android_app_url = "https://play.google.com/store/apps/details?id=com.espressif.novahome"
+ios_app_url = "https://apps.apple.com/in/app/esp-rainmaker-home/id1563728960"
 readme.text = "https://adwait-esp.github.io/flasher/images/mcpagent/README.md"
